@@ -17,7 +17,7 @@ const SelectButton = ({ children, selected, onClick }) => {
         backgroundColor: "gold",
         color: "black",
       },
-      width: "22%",
+      width: "17%",
       //   margin: 5,
     },
   });
@@ -25,7 +25,16 @@ const SelectButton = ({ children, selected, onClick }) => {
   const classes = useStyles();
 
   return (
-    <span onClick={onClick} className={classes.selectbutton}>
+    <span
+      onClick={onClick}
+      className={classes.selectbutton}
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {children}
     </span>
   );

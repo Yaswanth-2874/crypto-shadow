@@ -43,9 +43,6 @@ const CoinInfo = ({ coin }) => {
     setflag(true);
     setHistoricData(data.prices);
   };
-
-  console.log(coin);
-
   useEffect(() => {
     fetchHistoricData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,6 +115,19 @@ const CoinInfo = ({ coin }) => {
                   {day.label}
                 </SelectButton>
               ))}
+              <SelectButton
+                key="BUY"
+                onClick={() => {
+                  console.log(
+                    "Bought coin for " +
+                      coin.market_data.current_price[currency.toLowerCase()]
+                  );
+                  setDays(5);
+                }}
+                selected={5 === days}
+              >
+                Buy {coin.localization.en}
+              </SelectButton>
             </div>
           </>
         )}
