@@ -11,6 +11,7 @@ import {
 import SelectButton from "./SelectButton";
 import { chartDays } from "../config/data";
 import { CryptoState } from "../CryptoContext";
+import BuyCoin from "./BuyCoin";
 
 const CoinInfo = ({ coin }) => {
   const [historicData, setHistoricData] = useState();
@@ -68,7 +69,7 @@ const CoinInfo = ({ coin }) => {
           />
         ) : (
           <>
-            <Line
+          {days !== 5 ? (<Line
               data={{
                 labels: historicData.map((coin) => {
                   let date = new Date(coin[0]);
@@ -94,7 +95,10 @@ const CoinInfo = ({ coin }) => {
                   },
                 },
               }}
-            />
+            />) :
+            <BuyCoin cost = {coin.market_data.current_price.inr}></BuyCoin>
+            }
+            
             <div
               style={{
                 display: "flex",
