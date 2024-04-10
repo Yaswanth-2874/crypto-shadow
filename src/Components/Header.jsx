@@ -12,6 +12,27 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
+import { useAuth0 } from "@auth0/auth0-react";
+
+const LoginButton = () => {
+  const { loginWithRedirect } = useAuth0();
+
+  return (
+    <button onClick={loginWithRedirect} className="authenicationButton">
+      Login
+    </button>
+  );
+};
+
+const LogoutButton = () => {
+  const { logout } = useAuth0();
+
+  return (
+    <button onClick={logout} className="authenicationButton">
+      Logout
+    </button>
+  );
+};
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -24,6 +45,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = () => {
+  const { isAuthenticated, user } = useAuth0();
   const classes = useStyles();
   const history = useHistory();
 
@@ -49,22 +71,25 @@ const Header = () => {
               className={classes.title}
               variant="h6"
             >
-              Crypto Shadow
+              {isAuthenticated ? `Hello ${user.name} ` : "Crypto Shadow"}
             </Typography>
 
-            <Select
-              variant="outlined"
-              style={{
-                width: 100,
-                height: 40,
-                marginRight: 15,
-              }}
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-            >
-              <MenuItem value={"INR"}>INR</MenuItem>
-              <MenuItem value={"USD"}>USD</MenuItem>
-            </Select>
+            <div style={{ display: "flex", gap: "30px" }}>
+              {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+              <Select
+                variant="outlined"
+                style={{
+                  width: 100,
+                  height: 40,
+                  marginRight: 15,
+                }}
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+              >
+                <MenuItem value={"INR"}>INR</MenuItem>
+                <MenuItem value={"USD"}>USD</MenuItem>
+              </Select>
+            </div>
           </Toolbar>
         </Container>
       </AppBar>

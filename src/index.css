@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.authenicationButton {
+  width: 80px;
+  background: none;
+  border: 1px solid rgb(74, 76, 79);
+  cursor: pointer;
+  border-radius: 4px;
+  color: white;
+  font-size: medium;
+  font-weight: 400;
+}
+
+.authenicationButton:hover {
+  border-color: white;
+}
