@@ -1,45 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SelectButton from "./SelectButton";
+import axios from "axios";
+import { CircularProgress } from "@material-ui/core";
+import useSales from "../hooks/useSales";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function BuyCoin(props) {
-  const [balance, setBalance] = useState(1000000);
-  const [coins, setCoins] = useState(0);
-  const [input1, setInput1] = useState("");
-  const [input2, setInput2] = useState("");
-  const { cost } = props;
+  const { isAuthenticated } = useAuth0();
+  const { cost, coinName } = props;
+  const [response, setResponse] = useState();
 
-  const onBuyingCoin = () => {
-    if (!isNaN(input1) && !isNaN(input2)) {
-      const input1Value = parseFloat(input1);
-      const input2Value = parseFloat(input2);
-      if (balance < input2Value) {
-        alert("Not enough Balance fool");
-      } else {
-        console.log(`Bought ${input1Value} coins for ₹${input2Value}`);
-        setBalance(balance - input2Value);
-        setCoins(coins + input1Value);
-      }
-    } else {
-      alert("Enter valid numerical values");
-    }
+  const [
+    balance,
+    coins,
+    setInput1,
+    setInput2,
+    input1,
+    onBuyingCoin,
+    onSellingCoin,
+    input2,
+    canFetch,
+  ] = useSales({ response, coinName, setResponse });
+  const serverUrl = "http://localhost:5000/api";
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, [canFetch]);
+
+  const fetchData = () => {
+    if (!isAuthenticated) return;
+    axios
+      .get(serverUrl)
+      .then((response) => setResponse(response.data))
+      .then(() => console.log("Fetched data"))
+      .catch((e) => console.log("Unable to fetch data due to ", e));
   };
-
-  const onSellingCoin = () => {
-    if (!isNaN(input1) && !isNaN(input2)) {
-      const input1Value = parseFloat(input1);
-      const input2Value = parseFloat(input2);
-      if (coins < input1Value) {
-        alert("Not enough coins to sell");
-      } else {
-        console.log(`Sold ${input1Value} coins for ₹${input2Value}`);
-        setBalance(balance + input2Value);
-        setCoins(coins - input1Value);
-      }
-    } else {
-      alert("Enter valid numerical values");
-    }
-  };
-
   return (
     <div
       style={{
@@ -62,8 +58,30 @@ function BuyCoin(props) {
           alignItems: "center",
         }}
       >
-        <span>Balance Amount : {balance}</span>
-        <span>Coins Bought : {coins}</span>
+        <span>
+          Balance Amount :{" "}
+          {response ? (
+            balance
+          ) : (
+            <CircularProgress
+              style={{ color: "gold" }}
+              size={25}
+              thickness={3}
+            />
+          )}
+        </span>
+        <span>
+          Coins Bought :{" "}
+          {response ? (
+            coins
+          ) : (
+            <CircularProgress
+              style={{ color: "gold" }}
+              size={25}
+              thickness={3}
+            />
+          )}
+        </span>
       </div>
       <div
         style={{
@@ -102,8 +120,7 @@ function BuyCoin(props) {
                 }
                 isNaN(+e.target.value)
                   ? setInput2("Enter a valid number")
-                  : // eslint-disable-next-line
-                    setInput2(parseFloat(e.target.value) * cost);
+                  : setInput2(parseFloat(e.target.value) * cost);
               }}
               value={input1}
               style={{

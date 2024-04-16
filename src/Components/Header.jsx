@@ -18,7 +18,7 @@ const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
   return (
-    <button onClick={loginWithRedirect} className="authenicationButton">
+    <button onClick={loginWithRedirect} className="authenticationButton">
       Login
     </button>
   );
@@ -28,7 +28,7 @@ const LogoutButton = () => {
   const { logout } = useAuth0();
 
   return (
-    <button onClick={logout} className="authenicationButton">
+    <button onClick={logout} className="authenticationButton">
       Logout
     </button>
   );
